@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Parent Portal - Sri DSR Kids Playschool</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+    
+    <style>
+        body { 
+            font-family: 'Poppins', sans-serif; 
+            background-color: #f8fafc; /* slate-50 */
+        }
+        
+        .tab-active { color: #4f46e5 !important; }
+        
+        .input-style {
+            width: 100%;
+            padding: 0.85rem 1rem;
+            border: 1px solid #cbd5e1; /* slate-300 */
+            border-radius: 0.5rem;
+            box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+            transition: border-color 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+        }
+        .input-style:focus {
+            border-color: #4f46e5; /* indigo-600 */
+            box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.2);
+            outline: none;
+        }
+
+        .fade-in-up, .scale-in {
+            opacity: 0;
+            transition: opacity 0.8s ease-out, transform 0.8s ease-out;
+        }
+        .fade-in-up { transform: translateY(20px); }
+        .scale-in { transform: scale(0.95); }
+        
+        .active {
+            opacity: 1;
+            transform: translateY(0) scale(1);
+        }
+    </style>
+</head>
+<body>
+
+    <header class="bg-white/80 backdrop-blur-lg sticky top-0 z-50 shadow-sm" role="banner">
+        <div class="container mx-auto flex justify-between items-center p-4">
+            <a class='flex-shrink-0' href='/'>
+                <img src="https://i.ibb.co/Rp7LLjRv/logo-orginal-hd-1-removebg-preview-1.png" alt="Sri DSR Kids Playschool logo" class="h-12 md:h-14" />
+            </a>
+            <nav class="hidden md:flex items-center space-x-2 lg:space-x-4 h-full" role="navigation" aria-label="Primary navigation">
+                 <a class='flex items-center gap-2 font-semibold text-slate-600 hover:text-indigo-600 transition-colors duration-300 py-2 px-3' href='/'>
+                    <i class="fa-solid fa-house w-5 text-center"></i>Home
+                 </a>
+                <a href="https://sridsrkidsplayschool.netlify.app/" class="bg-indigo-600 text-white font-bold py-2 px-5 rounded-full hover:bg-indigo-700 transition-all duration-300 transform hover:scale-105 flex items-center gap-2">
+                    <i class="fa-solid fa-user"></i> Main Website
+                </a>
+            </nav>
+             <button id="menu-toggle" class="md:hidden text-2xl text-slate-800" aria-controls="mobile-menu" aria-expanded="false" aria-label="Toggle Menu">
+                <i class="fas fa-bars"></i>
+            </button>
+        </div>
+         <nav id="mobile-menu" class="hidden md:hidden bg-white shadow-lg" role="navigation" aria-label="Mobile navigation">
+            <div class="flex flex-col items-start py-4">
+                <a class='flex items-center gap-3 mx-auto  font-semibold text-slate-600 hover:text-indigo-600 px-6 py-2 w-full' href='/'><i class="fa-solid fa-house w-5 text-center"></i> Home</a>
+                <a href="https://sridsrkidsplayschool.netlify.app/" class="mt-4 bg-indigo-600 text-white font-bold py-2 px-6 rounded-full w-auto flex items-center gap-3 mx-auto"><i class="fa-solid fa-user"></i> Main Website</a>
+            </div>
+        </nav>
+    </header>
+
+    <main id="main-content" role="main">
+        <section class="py-12 md:py-20">
+            <div class="container mx-auto px-6 max-w-7xl">
+                <div class="grid grid-cols-1 lg:grid-cols-3 gap-12">
+
+                    <div class="lg:col-span-2 bg-white p-8 rounded-xl shadow-2xl scale-in">
+                        <div class="flex items-center justify-center mb-6">
+                            <div class="flex items-center gap-3">
+                                <div class="bg-indigo-600 p-3 rounded-lg">
+                                    <i class="fa-solid fa-user-shield text-white text-xl"></i>
+                                </div>
+                                <div>
+                                    <h2 class="font-bold text-3xl text-slate-800">Parent Portal</h2>
+                                    <p class="text-sm text-slate-500 -mt-1">Access Your Child's Details</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <form id="parent-login-form" class="space-y-5 mt-8">
+                            <p class="text-sm text-slate-600 font-medium mb-3 text-center">Verify your child's Student ID and your registered Contact Number to log in.</p>
+
+                            <div>
+                                <label for="studentId" class="block text-sm font-medium text-slate-700 mb-1">Student ID (e.g., DSRKVZ001)</label>
+                                <input type="text" id="studentId" required class="input-style placeholder:text-slate-400" placeholder="Enter Student ID" pattern="[A-Z0-9]+" title="Student ID must be alphanumeric and in uppercase">
+                            </div>
+
+                            <div>
+                                <label for="contactNumber" class="block text-sm font-medium text-slate-700 mb-1">Registered Contact Number</label>
+                                <input type="tel" id="contactNumber" required class="input-style placeholder:text-slate-400" placeholder="Enter 10-digit Contact Number" pattern="[0-9]{10,15}" title="Please enter a valid phone number (10-15 digits)">
+                            </div>
+
+                            <button type="submit" id="access-portal-btn" class="w-full flex items-center justify-center gap-2 px-5 py-3 bg-indigo-600 text-white font-bold rounded-lg shadow-lg hover:bg-indigo-700 transition-all duration-300 transform hover:scale-[1.02] mt-6">
+                                <i class="fa-solid fa-lock-open"></i> <span id="access-btn-text">Access Portal</span>
+                            </button>
+
+                            <div id="login-message" class="text-center text-sm font-semibold text-red-600 pt-2 hidden"></div>
+                        </form>
+                        
+                        <p class="text-center mt-6 text-xs text-slate-500">
+                            Are you an administrator? 
+                            <a class='text-indigo-600 hover:underline font-semibold' href='https://adminportalep-sridsrkids.netlify.app/'>Login here</a>
+                        </p>
+                    </div>
+
+                    <div class="lg:col-span-1 space-y-8 fade-in-up">
+                        <h2 class="text-3xl font-bold text-slate-800">Reach Out Directly</h2>
+
+                        <div class="flex items-start gap-4 p-4 bg-white rounded-lg shadow-md">
+                            <i class="fas fa-phone text-2xl text-indigo-600 mt-1"></i>
+                            <div>
+                                <p class="font-semibold text-lg text-slate-800">Call Us</p>
+                                <a href="tel:+917382592810" class="text-slate-600 hover:text-indigo-600 transition-colors">+91 73825 92810</a>
+                                <p class="text-sm text-slate-500">Available 9:00 AM – 4:30 PM</p>
+                            </div>
+                        </div>
+
+                        <div class="flex items-start gap-4 p-4 bg-white rounded-lg shadow-md">
+                            <i class="fas fa-envelope text-2xl text-indigo-600 mt-1"></i>
+                            <div>
+                                <p class="font-semibold text-lg text-slate-800">Email Us</p>
+                                <a href="mailto:dsrkidsplayschool@gmail.com" class="text-slate-600 hover:text-indigo-600 transition-colors">dsrkidsplayschool@gmail.com</a>
+                                <p class="text-sm text-slate-500">Responds within 24 hours.</p>
+                            </div>
+                        </div>
+
+                        <div class="flex items-start gap-4 p-4 bg-white rounded-lg shadow-md">
+                            <i class="fas fa-map-marker-alt text-2xl text-indigo-600 mt-1"></i>
+                            <div>
+                                <p class="font-semibold text-lg text-slate-800">Visit Our Campus</p>
+                                <address class="not-italic text-slate-600">
+                                    Sri DSR Kids Playschool, <br>
+                                    Pullareddy Nagar, Kavali, <br>
+                                    Andhra Pradesh 524201
+                                </address>
+                            </div>
+                        </div>
+                    </div>
+                    
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer class="bg-slate-800 text-white" role="contentinfo">
+        <div class="container mx-auto px-6 py-12 grid grid-cols-1 md:grid-cols-3 gap-8 text-center md:text-left">
+            <div>
+                <h4 class="font-bold text-lg mb-4">Contact Us</h4>
+                <p class="text-slate-300">Sri DSR Kids Playschool<br>Pullareddy Nagar, Kavali, AP<br><a href="mailto:dsrkidsplayschool@gmail.com" class="text-indigo-300 hover:text-white">dsrkidsplayschool@gmail.com</a><br><a href="https://wa.me/917382592810" class="text-indigo-300 hover:text-white" rel="noopener noreferrer">Phone: +91 73825 92810</a></p>
+            </div>
+            <div>
+                <h4 class="font-bold text-lg mb-4">Quick Links</h4>
+                <a class='block text-slate-300 hover:text-white mb-2' href='/'>Home</a>
+                <a href="https://sridsrkidsplayschool.netlify.app/" class="block text-slate-300 hover:text-white mb-2">Main Website</a>
+            </div>
+            <div>
+                <h4 class="font-bold text-lg mb-4">Follow Us</h4>
+                <div class="flex justify-center md:justify-start space-x-4 text-2xl">
+                    <a href="#" target="_blank" rel="noopener noreferrer" aria-label="Facebook" class="hover:text-indigo-300 transform hover:scale-110 transition-all"><i class="fab fa-facebook-f"></i></a>
+                    <a href="#" target="_blank" rel="noopener noreferrer" aria-label="Instagram" class="hover:text-indigo-300 transform hover:scale-110 transition-all"><i class="fab fa-instagram"></i></a>
+                    <a href="#" target="_blank" rel="noopener noreferrer" aria-label="YouTube" class="hover:text-indigo-300 transform hover:scale-110 transition-all"><i class="fab fa-youtube"></i></a>
+                </div>
+            </div>
+        </div>
+        <div class="bg-slate-900 py-4 text-center text-sm text-slate-400">&copy; 2025 Sri DSR Kids Playschool. All Rights Reserved.</div>
+    </footer>
+ <script>
+    // --- Your animation and mobile menu script ---
+    document.addEventListener('DOMContentLoaded', () => {
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('active');
+                    observer.unobserve(entry.target);
+                }
+            });
+        }, { threshold: 0.1 });
+
+        document.querySelectorAll('.fade-in-up, .scale-in').forEach(el => {
+            observer.observe(el);
+        });
+
+        const menuToggle = document.getElementById('menu-toggle');
+        const mobileMenu = document.getElementById('mobile-menu');
+        if (menuToggle && mobileMenu) {
+            menuToggle.addEventListener('click', () => {
+                mobileMenu.classList.toggle('hidden');
+                const icon = menuToggle.querySelector('i');
+                icon.classList.toggle('fa-bars');
+                icon.classList.toggle('fa-times');
+            });
+        }
+    });
+
+    // --- Login Logic that calls your Vercel Function ---
+    document.getElementById('parent-login-form').addEventListener('submit', async function(e) {
+        e.preventDefault();
+        
+        const studentId = document.getElementById('studentId').value.trim();
+        const contactNumber = document.getElementById('contactNumber').value.trim();
+        const messageDiv = document.getElementById('login-message');
+        const submitBtn = document.getElementById('access-portal-btn');
+        const btnText = document.getElementById('access-btn-text');
+
+        // --- UI: Disable button and show loading state ---
+        messageDiv.classList.add('hidden');
+        submitBtn.disabled = true;
+        btnText.innerHTML = '<i class="fa-solid fa-spinner fa-spin mr-2"></i> Verifying...';
+
+        try {
+            // Call the Vercel Function using its API path
+            const response = await fetch('/api/loginParent', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    studentId: studentId,
+                    contactNumber: contactNumber
+                }),
+            });
+            
+            // This is the line that will parse the JSON response from your function
+            const result = await response.json();
+
+            if (!response.ok) {
+                // This handles server errors like 500
+                throw new Error(result.message || 'A server error occurred.');
+            }
+
+            if (result.success) {
+                // On successful validation, redirect to the details page
+                window.location.href = `parent-details.html?id=${result.docId}`;
+            } else {
+                // Show the error message from the function (e.g., "Student ID not found")
+                messageDiv.textContent = result.message;
+                messageDiv.classList.remove('hidden');
+            }
+
+        } catch (error) {
+            console.error("Login Failed:", error);
+            messageDiv.textContent = error.message || 'A network error occurred. Please try again.';
+            messageDiv.classList.remove('hidden');
+        } finally {
+            // --- UI: Re-enable button and restore text ---
+            submitBtn.disabled = false;
+            btnText.innerHTML = 'Access Portal';
+        }
+    });
+</script>
+
+</body>
+</html>

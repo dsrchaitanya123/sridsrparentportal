@@ -1,0 +1,330 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Student Details - Parent Portal</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Inter', sans-serif; background-color: #f1f5f9; }
+    </style>
+</head>
+
+<body>
+    <header class="bg-white/80 backdrop-blur-lg sticky top-0 z-50 shadow-sm" role="banner">
+        <div class="container mx-auto flex justify-between items-center p-4">
+            <a href="index.html" class="flex-shrink-0">
+                <img src="https://i.ibb.co/Rp7LLjRv/logo-orginal-hd-1-removebg-preview-1.png" alt="Sri DSR Kids Playschool logo" class="h-12 md:h-14" />
+            </a>
+            <nav class="hidden md:flex items-center space-x-2 lg:space-x-4 h-full" role="navigation" aria-label="Primary navigation">
+                 <a href="index.html" class="flex items-center gap-2 font-semibold text-slate-600 hover:text-indigo-600 transition-colors duration-300 py-2 px-3">
+                    <i class="fa-solid fa-house w-5 text-center"></i>Home
+                </a>
+                <a href="#" class="bg-indigo-600 text-white font-bold py-2 px-5 rounded-full hover:bg-indigo-700 transition-all duration-300 transform hover:scale-105 flex items-center gap-2">
+                    <i class="fa-solid fa-user"></i> Main Website
+                </a>
+                <a href="index.html" class="flex items-center gap-2 px-4 py-2 text-rose-600 bg-rose-50 border border-rose-200 rounded-lg font-semibold hover:bg-rose-100 transition-colors">
+                    <i class="fa-solid fa-right-from-bracket"></i> Logout
+                </a>
+            </nav>
+            <button id="menu-toggle" class="md:hidden text-2xl text-slate-800" aria-controls="mobile-menu" aria-expanded="false" aria-label="Toggle Menu">
+                <i class="fas fa-bars"></i>
+            </button>
+        </div>
+        <nav id="mobile-menu" class="hidden md:hidden bg-white shadow-lg" role="navigation" aria-label="Mobile navigation">
+            <div class="flex flex-col items-center gap-y-4 py-4">
+                <a href="index.html" class="flex items-center gap-3 font-semibold text-slate-600 hover:text-indigo-600 px-6 py-2 w-full justify-center"><i class="fa-solid fa-house w-5 text-center"></i> Home</a>
+                <a href="https://sridsrkidsplayschool.netlify.app/" class="bg-indigo-600 text-white font-bold py-2 px-6 rounded-full w-auto flex items-center gap-3"><i class="fa-solid fa-user"></i> Main Website</a>
+                <a href="index.html" class="flex items-center gap-2 px-4 py-2 text-rose-600 bg-rose-50 border border-rose-200 rounded-lg font-semibold hover:bg-rose-100 transition-colors">
+                    <i class="fa-solid fa-right-from-bracket"></i> Logout
+                </a>
+            </div>
+        </nav>
+    </header>
+
+    <div class="max-w-4xl mx-auto my-10 bg-white rounded-xl shadow-lg p-6 md:p-10 border border-slate-200">
+        
+        <header class="flex justify-between items-center border-b pb-4 mb-6">
+            <h1 class="text-2xl md:text-3xl font-bold text-blue-600">
+                <i class="fa-solid fa-graduation-cap mr-2"></i> Child's Profile
+            </h1>
+        </header>
+
+        <div id="loading-state" class="text-center p-10 text-slate-500">
+            <i class="fa-solid fa-spinner fa-spin text-2xl mb-4"></i>
+            <p>Loading student data...</p>
+        </div>
+
+        <div id="details-content" class="hidden">
+            <div class="flex flex-col md:flex-row items-start md:items-center gap-6 pb-6 border-b mb-6">
+                
+                <div id="student-photo-container" class="w-24 h-24 rounded-full border-4 border-slate-200 bg-slate-100 flex items-center justify-center text-slate-500">
+                    <i class="fa-solid fa-spinner fa-spin text-xl"></i>
+                </div>
+                
+                <div>
+                    <h2 id="student-name" class="text-3xl font-extrabold text-slate-800"></h2>
+                    <p class="text-lg text-slate-500"><strong class="font-medium text-slate-600">Student ID:</strong> <span id="student-id" class="font-mono"></span></p>
+                    <span id="student-status-badge" class="mt-2 inline-block px-3 py-1 text-sm font-semibold rounded-full"></span>
+                </div>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                <div class="space-y-4">
+                    <h3 class="font-bold text-xl text-blue-600 border-b pb-2">Academic & Personal Info</h3>
+                    <p><strong class="font-medium text-slate-700 w-32 inline-block">Class:</strong> <span id="detail-class"></span></p>
+                    <p><strong class="font-medium text-slate-700 w-32 inline-block">Roll No:</strong> <span id="detail-roll"></span></p>
+                    <p><strong class="font-medium text-slate-700 w-32 inline-block">Date of Birth:</strong> <span id="detail-dob"></span></p>
+                    <p><strong class="font-medium text-slate-700 w-32 inline-block">Gender:</strong> <span id="detail-gender"></span></p>
+                    <p><strong class="font-medium text-slate-700 w-32 inline-block">Transport:</strong> <span id="detail-transport"></span></p>
+                    <p><strong class="font-medium text-slate-700 w-32 inline-block">Medical Info:</strong> <span id="detail-medical" class="text-sm"></span></p>
+                </div>
+
+                <div class="space-y-4">
+                    <h3 class="font-bold text-xl text-blue-600 border-b pb-2">Guardian & Contact</h3>
+                    <p><strong class="font-medium text-slate-700 w-32 inline-block">Guardian:</strong> <span id="detail-guardian"></span></p>
+                    <p><strong class="font-medium text-slate-700 w-32 inline-block">Primary Contact:</strong> <span id="detail-contact"></span></p>
+                    <p><strong class="font-medium text-slate-700 w-32 inline-block">Email:</strong> <span id="detail-email"></span></p>
+                    <p><strong class="font-medium text-slate-700 w-32 inline-block">Address:</strong> <span id="detail-address" class="text-sm"></span></p>
+                    <p><strong class="font-medium text-slate-700 w-32 inline-block">Emergency:</strong> <span id="detail-emergency"></span></p>
+                </div>
+            </div>
+            
+            <div class="mt-8 border-t pt-6">
+                <h3 class="font-bold text-xl text-blue-600 border-b pb-2 mb-4">Fee Status Overview</h3>
+                <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+                    <div class="bg-blue-50 p-4 rounded-lg text-center"><p class="text-sm text-blue-700 font-medium">Course Type</p><p id="fee-course-type" class="text-lg font-bold text-blue-900 mt-1"></p></div>
+                    <div class="bg-green-50 p-4 rounded-lg text-center"><p class="text-sm text-green-700 font-medium" id="fee-label">Total Fee</p><p id="fee-total" class="text-lg font-bold text-green-900 mt-1"></p></div>
+                    <div class="bg-amber-50 p-4 rounded-lg text-center"><p class="text-sm text-amber-700 font-medium">Amount Paid</p><p id="fee-paid" class="text-lg font-bold text-amber-900 mt-1"></p></div>
+                    <div class="p-4 rounded-lg text-center" id="fee-balance-box"><p class="text-sm font-medium" id="fee-balance-label">Balance Due</p><p id="fee-balance" class="text-lg font-bold mt-1"></p></div>
+                </div>
+                
+                <div class="flex justify-end mt-6">
+                    <button id="pay-fee-btn" class="flex items-center gap-2 px-6 py-3 bg-emerald-600 text-white font-semibold rounded-lg shadow-md hover:bg-emerald-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed">
+                        <i class="fa-solid fa-credit-card"></i> Pay Fees Now
+                    </button>
+                </div>
+                <p class="text-sm text-slate-500 italic mt-4">For detailed transaction records, please contact the school office.</p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const menuToggle = document.getElementById('menu-toggle');
+            const mobileMenu = document.getElementById('mobile-menu');
+
+            if (menuToggle && mobileMenu) {
+                menuToggle.addEventListener('click', () => {
+                    // Toggle visibility of the mobile menu
+                    mobileMenu.classList.toggle('hidden');
+
+                    // Toggle the hamburger/close icon
+                    const icon = menuToggle.querySelector('i');
+                    icon.classList.toggle('fa-bars');
+                    icon.classList.toggle('fa-times');
+                    
+                    // Toggle ARIA attribute for accessibility
+                    const isExpanded = mobileMenu.classList.contains('hidden') ? 'false' : 'true';
+                    menuToggle.setAttribute('aria-expanded', isExpanded);
+                });
+            }
+        });
+    </script>
+    
+   <script type="module">
+    
+
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+    import { getFirestore, doc, getDoc, Timestamp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+    import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+
+    // --- FIREBASE CONFIGURATION (Public Client Config) ---
+    const firebaseConfig = {
+        apiKey: "AIzaSyD1JFCa49iJZMhN2KMa3r6lKqtk7d0vhw4",
+        authDomain: "dsr-erp.firebaseapp.com",
+        projectId: "dsr-erp",
+        storageBucket: "dsr-erp.appspot.com",
+        messagingSenderId: "710713410421",
+        appId: "1:710713410421:web:b81f2a8a2c5add4597093c",
+        measurementId: "G-LGLX3MX6T6"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const db = getFirestore(app);
+    const auth = getAuth(app);
+
+    // --- Utility Functions ---
+    const displayValue = (val) => val ? val : `<span class="text-slate-400">N/A</span>`;
+    const formatCurrency = (val) => `₹ ${Number(val || 0).toLocaleString('en-IN', { maximumFractionDigits: 0 })}`;
+    
+    const formatDate = (ts) => {
+        if (ts instanceof Timestamp && typeof ts.toDate === 'function') {
+            return ts.toDate().toLocaleDateString('en-GB');
+        }
+        if (typeof ts === 'string' && ts.match(/^\d{4}-\d{2}-\d{2}$/)) {
+            const [year, month, day] = ts.split('-');
+            return `${day}/${month}/${year}`;
+        }
+        return 'N/A';
+    };
+
+    async function fetchStudentData(docId) {
+        // This function relies on the Firestore Security Rules (Rule 2) 
+        // to ensure that the logged-in user (UID == docId) is the only one allowed to read this data.
+        try {
+            const studentDocRef = doc(db, "students", docId); 
+            const docSnap = await getDoc(studentDocRef);
+
+            if (docSnap.exists()) {
+                const data = docSnap.data();
+                data.docId = docSnap.id;
+                return data;
+            } else {
+                return null;
+            }
+        } catch (error) {
+            console.error("Error fetching student data from Firebase:", error);
+            return null;
+        }
+    }
+
+    async function loadDetails(docId) {
+        const loadingState = document.getElementById('loading-state');
+        const detailsContent = document.getElementById('details-content');
+        const photoContainer = document.getElementById('student-photo-container');
+        const payFeeBtn = document.getElementById('pay-fee-btn');
+
+        photoContainer.innerHTML = `<i class="fa-solid fa-user text-3xl text-slate-400"></i>`;
+        
+        const data = await fetchStudentData(docId);
+
+        if (data) {
+            loadingState.classList.add('hidden');
+            detailsContent.classList.remove('hidden');
+
+            // --- 1. Data Mapping ---
+            // (Your original data mapping logic goes here...)
+            document.getElementById('student-name').textContent = data.fullName || 'N/A';
+            document.getElementById('student-id').textContent = data.student_id || 'N/A';
+            // ... (map all other personal and contact details) ...
+
+            // --- 2. Fee Status Calculation ---
+            const totalFeeStructure = (data['total-tution'] || 0) + (data['total-book'] || 0);
+            const totalPaid = (data['tution-paid'] || 0) + (data['book-paid'] || 0);
+            let balanceDue = totalFeeStructure - totalPaid;
+            if (balanceDue < 0) balanceDue = 0; // Prevent negative display
+
+            // ... (Map fee display elements: fee-total, fee-paid) ...
+            
+            // --- 3. Balance Display & Button State ---
+            const balanceBox = document.getElementById('fee-balance-box');
+            const balanceLabel = document.getElementById('fee-balance-label');
+            const balanceEl = document.getElementById('fee-balance');
+            
+            balanceEl.textContent = formatCurrency(balanceDue);
+            
+            if (balanceDue > 0) {
+                balanceBox.className = 'bg-red-50 p-4 rounded-lg text-center';
+                balanceLabel.className = 'text-sm text-red-700 font-medium';
+                balanceEl.className = 'text-lg font-bold text-red-900 mt-1';
+                payFeeBtn.disabled = false;
+            } else {
+                balanceBox.className = 'bg-emerald-50 p-4 rounded-lg text-center';
+                balanceLabel.className = 'text-sm text-emerald-700 font-medium';
+                balanceEl.className = 'text-lg font-bold text-emerald-900 mt-1';
+                payFeeBtn.disabled = true;
+                payFeeBtn.innerHTML = '<i class="fa-solid fa-check mr-2"></i> Fees Cleared';
+            }
+
+            // --- 4. Payment Button Handler (Defined in the onAuthStateChanged block below) ---
+
+        } else {
+            loadingState.innerHTML = '<i class="fa-solid fa-circle-exclamation text-2xl mb-4 text-red-600"></i><p class="text-red-600">Student data not found or access denied. Please contact the school office.</p>';
+            detailsContent.classList.add('hidden');
+            if (payFeeBtn) payFeeBtn.classList.add('hidden');
+        }
+    }
+
+    // --- Authentication State Manager ---
+    document.addEventListener('DOMContentLoaded', () => {
+        const loadingState = document.getElementById('loading-state');
+        const urlParams = new URLSearchParams(window.location.search);
+        const studentIdFromUrl = urlParams.get('id');
+
+        onAuthStateChanged(auth, (user) => {
+            const payFeeBtn = document.getElementById('pay-fee-btn');
+
+            if (user && user.uid === studentIdFromUrl) {
+                // User is authenticated, and the UID matches the student ID in the URL.
+                loadDetails(user.uid);
+                
+                // Add the payment handler (uses the authenticated session)
+                payFeeBtn.addEventListener('click', async () => {
+                    if (!payFeeBtn.disabled) {
+                        payFeeBtn.disabled = true;
+                        payFeeBtn.innerHTML = '<i class="fa-solid fa-spinner fa-spin mr-2"></i> Generating Link...';
+                        
+                        try {
+                            // **STEP 1: Get the current user's ID token**
+                            // This token is verified by the Netlify function for security.
+                            const idToken = await auth.currentUser.getIdToken();
+                            
+                            // **STEP 2: Call the Secure Netlify Function with the Token**
+                            const linkResponse = await fetch('/.netlify/functions/generateCashfreeLink', {
+                                method: 'POST',
+                                headers: {
+                                    'Content-Type': 'application/json',
+                                    'Authorization': `Bearer ${idToken}` // <--- CRITICAL SECURITY STEP
+                                },
+                                // The backend function gets the Student ID from the token payload.
+                                body: JSON.stringify({}) 
+                            });
+                            
+                            if (!linkResponse.ok) {
+                                 const errorData = await linkResponse.json();
+                                 throw new Error(errorData.error || `HTTP Error: ${linkResponse.status}`);
+                            }
+
+                            const responseData = await linkResponse.json();
+                            const paymentUrl = responseData.url;
+
+                            // **STEP 3: Redirect the User**
+                            if (paymentUrl) {
+                                window.location.href = paymentUrl; // Redirect to Cashfree
+                            } else {
+                                alert(responseData.message || "Fees already cleared.");
+                            }
+
+                        } catch (error) {
+                            console.error("Payment Link Generation Failed:", error);
+                            alert("Failed to start payment. Please contact the office.");
+                        } finally {
+                            // Reset button state
+                            payFeeBtn.disabled = false;
+                            payFeeBtn.innerHTML = '<i class="fa-solid fa-credit-card"></i> Pay Fees Now';
+                        }
+                    }
+                });
+
+            } else {
+                // Session is invalid or token mismatch. Redirect to login page.
+                loadingState.innerHTML = '<i class="fa-solid fa-circle-exclamation text-2xl mb-4 text-red-600"></i><p class="text-red-600">Session invalid or expired. Redirecting to login...</p>';
+                signOut(auth); // Clear any lingering token
+                setTimeout(() => {
+                    window.location.href = 'index.html';
+                }, 2000);
+            }
+            
+            // Logout Button Handler
+            document.querySelector('a[href="index.html"][class*="text-rose-600"]').addEventListener('click', async (e) => {
+                e.preventDefault();
+                await signOut(auth);
+                window.location.href = 'index.html';
+            });
+        });
+    </script>
+</body>
+</html>

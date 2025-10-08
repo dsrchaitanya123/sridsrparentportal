@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Make Payment - Sri DSR Kids Playschool</title>
+    <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Poppins', sans-serif; background-color: #f8fafc; }
+        .fee-card {
+            border: 2px solid #e2e8f0;
+            transition: all 0.2s ease-in-out;
+        }
+        .fee-card.selected {
+            border-color: #4f46e5; /* indigo-600 */
+            background-color: #eef2ff; /* indigo-50 */
+            transform: translateY(-2px);
+            box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+        }
+        /* Simple pulse animation for skeleton loader */
+        @keyframes pulse {
+            50% { opacity: .5; }
+        }
+        .skeleton {
+            animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+        }
+    </style>
+</head>
+<body class="p-4 sm:p-8">
+
+    <div class="max-w-md mx-auto bg-white rounded-xl shadow-lg border border-slate-200 overflow-hidden">
+        <header class="flex justify-between items-center p-6 border-b border-slate-200">
+            <a href="index.html"><img src="https://i.ibb.co/Rp7LLjRv/logo-orginal-hd-1-removebg-preview-1.png" alt="Logo" class="h-12" /></a>
+            <a href="#" class="back-link text-sm font-semibold text-indigo-600 hover:text-indigo-800"><i class="fa-solid fa-arrow-left mr-1"></i> Back</a>
+        </header>
+
+        <div id="loader">
+            <div class="p-8">
+                <div class="skeleton h-8 w-3/4 mb-4 bg-slate-200 rounded"></div>
+                <div class="skeleton h-6 w-1/2 mb-8 bg-slate-200 rounded"></div>
+                <div class="skeleton h-24 w-full mb-4 bg-slate-200 rounded-lg"></div>
+                <div class="skeleton h-24 w-full mb-6 bg-slate-200 rounded-lg"></div>
+                <div class="skeleton h-12 w-full bg-slate-200 rounded-lg"></div>
+            </div>
+        </div>
+
+        <main id="main-content" class="p-6 md:p-8 hidden">
+            <div class="mb-8">
+                <p class="text-sm text-slate-500">PAYMENT FOR</p>
+                <h1 id="student-name" class="text-2xl font-bold text-slate-800"></h1>
+                <p id="student-id-display" class="text-sm font-medium text-slate-500"></p>
+            </div>
+            
+            <form id="payment-form">
+                <div class="mb-6">
+                    <label class="block text-base font-bold text-slate-700 mb-3">1. Select a Fee to Pay</label>
+                    <div id="fee-options" class="space-y-4">
+                        </div>
+                </div>
+
+                <div class="mb-8">
+                    <label for="amount" class="block text-base font-bold text-slate-700 mb-3">2. Confirm Amount (INR)</label>
+                    <div class="relative">
+                        <div class="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-4">
+                            <span class="text-slate-500 font-semibold text-xl">₹</span>
+                        </div>
+                        <input type="number" id="amount" name="amount" required class="text-xl font-bold text-slate-700 block w-full rounded-lg border-slate-300 pl-10 pr-12 py-3 focus:border-indigo-500 focus:ring-indigo-500" placeholder="0.00">
+                    </div>
+                </div>
+
+                <div id="payment-message" class="text-center text-sm font-semibold text-red-600 mb-6 hidden"></div>
+
+                <button type="submit" id="pay-button" class="w-full inline-flex items-center justify-center gap-2 px-8 py-4 bg-emerald-600 text-white font-bold text-lg rounded-lg shadow-md hover:bg-emerald-700 transition-all disabled:bg-slate-400 disabled:cursor-not-allowed">
+                    <i class="fa-solid fa-shield-halved"></i>
+                    <span id="pay-button-text">Select a Fee</span>
+                </button>
+            </form>
+        </main>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', async () => {
+            // --- Elements ---
+            const loader = document.getElementById('loader');
+            const mainContent = document.getElementById('main-content');
+            const studentNameEl = document.getElementById('student-name');
+            const studentIdDisplayEl = document.getElementById('student-id-display');
+            const feeOptionsContainer = document.getElementById('fee-options');
+            const amountInput = document.getElementById('amount');
+            const payButton = document.getElementById('pay-button');
+            const payButtonText = document.getElementById('pay-button-text');
+            const messageDiv = document.getElementById('payment-message');
+            const paymentForm = document.getElementById('payment-form');
+            
+            // --- Initial State ---
+            let selectedFee = null;
+            payButton.disabled = true;
+
+            // --- Get Student ID and Setup Back Links ---
+            const params = new URLSearchParams(window.location.search);
+            const docId = params.get('id');
+            const backLinks = document.querySelectorAll('.back-link');
+            const redirectUrl = docId ? `parent-details.html?id=${docId}` : 'index.html';
+            backLinks.forEach(link => { link.href = redirectUrl; });
+
+            // --- 1. FETCH STUDENT DATA ---
+            try {
+                const response = await fetch('/api/getStudentDetails', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ docId: docId }),
+                });
+                if (!response.ok) throw new Error('Could not fetch student details.');
+                
+                const student = await response.json();
+                
+                // --- 2. RENDER THE DATA ---
+                studentNameEl.textContent = student.studentName;
+                studentIdDisplayEl.textContent = `ID: ${student.studentId}`;
+                
+                // Create Fee Cards dynamically
+                const fees = [
+                    { type: 'Tution Fee', amount: student.tutionFeeDue, icon: 'fa-graduation-cap' },
+                    { type: 'Book Fee', amount: student.bookFeeDue, icon: 'fa-book-open' }
+                ];
+
+                fees.forEach(fee => {
+                    if (fee.amount > 0) { // Only show fees that are due
+                        const card = document.createElement('div');
+                        card.className = 'fee-card p-4 rounded-lg cursor-pointer flex justify-between items-center';
+                        card.innerHTML = `
+                            <div class="flex items-center gap-4">
+                                <i class="fa-solid ${fee.icon} text-2xl text-indigo-600"></i>
+                                <span class="font-semibold text-slate-700">${fee.type}</span>
+                            </div>
+                            <span class="font-bold text-lg text-slate-800">₹${fee.amount}</span>
+                        `;
+                        card.addEventListener('click', () => handleFeeSelection(card, fee));
+                        feeOptionsContainer.appendChild(card);
+                    }
+                });
+
+                // --- 3. SHOW THE CONTENT ---
+                loader.classList.add('hidden');
+                mainContent.classList.remove('hidden');
+
+            } catch (error) {
+                console.error(error);
+                loader.innerHTML = `<div class="p-8 text-center text-red-600 font-semibold">${error.message}</div>`;
+            }
+
+            // --- Interaction Logic ---
+            function handleFeeSelection(cardElement, fee) {
+                // Deselect other cards
+                document.querySelectorAll('.fee-card').forEach(c => c.classList.remove('selected'));
+                // Select this card
+                cardElement.classList.add('selected');
+                
+                selectedFee = fee;
+                amountInput.value = fee.amount;
+                payButtonText.textContent = `Pay ₹${fee.amount} Securely`;
+                payButton.disabled = false;
+            }
+
+            amountInput.addEventListener('input', () => {
+                const amount = amountInput.value;
+                if (amount > 0 && selectedFee) {
+                    payButtonText.textContent = `Pay ₹${amount} Securely`;
+                    payButton.disabled = false;
+                } else {
+                    payButtonText.textContent = 'Enter a valid amount';
+                    payButton.disabled = true;
+                }
+            });
+
+            // --- FORM SUBMISSION ---
+            paymentForm.addEventListener('submit', async function(e) {
+                e.preventDefault();
+                // ... (The payment submission logic from the previous step goes here) ...
+                // This uses the 'amount' from the input and 'selectedFee.type' for paymentFor
+                const amount = amountInput.value;
+                const paymentFor = selectedFee.type;
+
+                payButton.disabled = true;
+                payButtonText.innerHTML = '<i class="fa-solid fa-spinner fa-spin mr-2"></i> Creating Order...';
+
+                try {
+                    const orderResponse = await fetch('/api/createPaymentOrder', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ amount, studentId: docId, paymentFor }),
+                    });
+                    const order = await orderResponse.json();
+                    if (!orderResponse.ok) throw new Error(order.message);
+
+                    const options = {
+                        key: "YOUR_RAZORPAY_KEY_ID", // **PASTE YOUR KEY ID HERE**
+                        amount: order.amount,
+                        currency: order.currency,
+                        name: "Sri DSR Kids Playschool",
+                        description: `${paymentFor} for ${studentNameEl.textContent}`,
+                        order_id: order.id,
+                        handler: function(response) {
+                            alert("Payment Successful!");
+                            window.location.href = redirectUrl;
+                        },
+                        theme: { color: "#4f46e5" }
+                    };
+                    
+                    const rzp = new Razorpay(options);
+                    rzp.open();
+
+                } catch (error) {
+                    messageDiv.textContent = error.message || 'Could not initiate payment.';
+                    messageDiv.classList.remove('hidden');
+                } finally {
+                    payButton.disabled = false;
+                    payButtonText.textContent = `Pay ₹${amountInput.value} Securely`;
+                }
+            });
+        });
+    </script>
+</body>
+</html>
