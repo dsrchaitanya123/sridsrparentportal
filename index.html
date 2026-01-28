@@ -4,30 +4,57 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     
-    <title>Parent Portal - Sri DSR Kids Playschool</title>
-    <meta name="title" content="Parent Portal - Sri DSR Kids Playschool">
-    <meta name="description" content="Secure Parent Portal login for Sri DSR Kids Playschool, Kavali. Access your child's academic progress, attendance, and school updates securely using Student ID and registered contact number.">
-    <meta name="keywords" content="Sri DSR Kids Playschool, Parent Portal, Kavali Playschool, Student Login, School Management System, Andhra Pradesh Schools, DSR Kids, Early Education Kavali">
+    <title>Parent Portal Login | Sri DSR Kids Playschool</title>
+    <meta name="title" content="Parent Portal Login | Sri DSR Kids Playschool">
+    <meta name="description" content="Login to the Sri DSR Kids Playschool Parent Portal. Securely access your child's attendance, academic reports, and school notifications. Located in Kavali, AP.">
+    <meta name="keywords" content="Parent Portal Login, Sri DSR Kids Playschool, Student Login, DSR Kids Kavali, School Management System, Check Attendance, Andhra Pradesh Schools">
     <meta name="author" content="Sri DSR Kids Playschool">
     <meta name="robots" content="index, follow">
     <meta name="theme-color" content="#4f46e5">
 
     <meta property="og:type" content="website">
-    <meta property="og:url" content="https://sridsrkidsplayschool.in/">
-    <meta property="og:title" content="Parent Portal - Sri DSR Kids Playschool">
+    <meta property="og:url" content="https://sridsrkidsplayschool.in/parent-portal">
+    <meta property="og:title" content="Parent Portal Login | Sri DSR Kids Playschool">
     <meta property="og:description" content="Securely access your child's details, attendance, and school updates. Login with your Student ID.">
     <meta property="og:image" content="https://i.ibb.co/Rp7LLjRv/logo-orginal-hd-1-removebg-preview-1.png">
-    <meta property="og:image:alt" content="Sri DSR Kids Playschool Logo">
     <meta property="og:site_name" content="Sri DSR Kids Playschool">
 
     <meta property="twitter:card" content="summary_large_image">
-    <meta property="twitter:url" content="https://sridsrkidsplayschool.in/">
-    <meta property="twitter:title" content="Parent Portal - Sri DSR Kids Playschool">
+    <meta property="twitter:url" content="https://sridsrkidsplayschool.in/parent-portal">
+    <meta property="twitter:title" content="Parent Portal Login | Sri DSR Kids Playschool">
     <meta property="twitter:description" content="Securely access your child's details, attendance, and school updates. Login with your Student ID.">
     <meta property="twitter:image" content="https://i.ibb.co/Rp7LLjRv/logo-orginal-hd-1-removebg-preview-1.png">
 
     <link rel="icon" type="image/png" href="https://i.ibb.co/Rp7LLjRv/logo-orginal-hd-1-removebg-preview-1.png">
     <link rel="canonical" href="https://sridsrkidsplayschool.in/parent-portal">
+
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "Preschool",
+      "name": "Parent Portal",
+      "url": "https://sridsrkidsplayschool.in",
+      "logo": "https://i.ibb.co/Rp7LLjRv/logo-orginal-hd-1-removebg-preview-1.png",
+      "description": "Premium playschool and early education center in Kavali.",
+      "address": {
+        "@type": "PostalAddress",
+        "streetAddress": "Pullareddy Nagar",
+        "addressLocality": "Kavali",
+        "addressRegion": "Andhra Pradesh",
+        "postalCode": "524201",
+        "addressCountry": "IN"
+      },
+      "contactPoint": {
+        "@type": "ContactPoint",
+        "telephone": "+91-73825-92810",
+        "contactType": "admissions"
+      },
+      "sameAs": [
+        "https://www.facebook.com/sridsrkids", 
+        "https://www.instagram.com/sridsrkids"
+      ]
+    }
+    </script>
 
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
@@ -74,7 +101,7 @@
 
     <header class="bg-white/80 backdrop-blur-lg sticky top-0 z-50 shadow-sm" role="banner">
         <div class="container mx-auto flex justify-between items-center p-4">
-            <a class='flex-shrink-0' href='/'>
+            <a class='flex-shrink-0' href='/' aria-label="Go to Homepage">
                 <img src="https://i.ibb.co/Rp7LLjRv/logo-orginal-hd-1-removebg-preview-1.png" alt="Sri DSR Kids Playschool logo" class="h-12 md:h-14" />
             </a>
             <nav class="hidden md:flex items-center space-x-2 lg:space-x-4 h-full" role="navigation" aria-label="Primary navigation">
@@ -109,7 +136,7 @@
                                     <i class="fa-solid fa-user-shield text-white text-xl"></i>
                                 </div>
                                 <div>
-                                    <h2 class="font-bold text-3xl text-slate-800">Parent Portal</h2>
+                                    <h1 class="font-bold text-3xl text-slate-800">Parent Portal</h1>
                                     <p class="text-sm text-slate-500 -mt-1">Access Your Child's Details</p>
                                 </div>
                             </div>
@@ -132,7 +159,7 @@
                                 <i class="fa-solid fa-lock-open"></i> <span id="access-btn-text">Access Portal</span>
                             </button>
 
-                            <div id="login-message" class="text-center text-sm font-semibold text-red-600 pt-2 hidden"></div>
+                            <div id="login-message" class="text-center text-sm font-semibold text-red-600 pt-2 hidden" role="alert"></div>
                         </form>
                         
                         <p class="text-center mt-6 text-xs text-slate-500">
